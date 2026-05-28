@@ -7,14 +7,14 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Histórico em memória (sem banco de dados para simplicidade)
+// Histórico em memória
 let historico = [];
 
 // Rota principal - serve o frontend
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
 // API: calcular expressão
@@ -26,7 +26,6 @@ app.post('/api/calcular', (req, res) => {
   }
 
   try {
-    // Valida que só tem números e operadores seguros
     if (!/^[\d\s\+\-\*\/\.\(\)]+$/.test(expressao)) {
       return res.status(400).json({ erro: 'Expressão inválida' });
     }
@@ -64,7 +63,7 @@ app.delete('/api/historico', (req, res) => {
   res.json({ mensagem: 'Histórico limpo' });
 });
 
-// Health check para plataformas de deploy
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', uptime: process.uptime() });
 });
